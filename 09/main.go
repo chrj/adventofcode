@@ -11,7 +11,7 @@ import (
 
 func sim(players, lastMarble int) int {
 
-	scores := make([]int, players, players)
+	scores := make([]int, players)
 
 	marbles := ring.New(1)
 	marbles.Value = 0
