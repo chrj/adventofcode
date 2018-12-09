@@ -27,16 +27,16 @@ func sim(players, lastMarble int) int {
 			scores[player] += m
 
 			// move pointer counter-clockwise
-			marbles = marbles.Prev().Prev().Prev().Prev().Prev().Prev().Prev().Prev().Prev()
+			marbles = marbles.Prev().Prev().Prev().Prev().Prev().Prev().Prev()
 
 			// remove marble
-			removed := marbles.Unlink(1)
+			removed := marbles.Prev().Prev().Unlink(1)
 
 			// add to score
 			scores[player] += removed.Value.(int)
 
 			// move pointer forwards
-			marbles = marbles.Next().Next()
+			marbles = marbles.Next()
 
 		} else {
 
@@ -53,7 +53,7 @@ func sim(players, lastMarble int) int {
 
 	sort.Ints(scores)
 
-	return scores[len(scores)-1]
+	return scores[players-1]
 
 }
 
@@ -65,19 +65,32 @@ func main() {
 		line := scanner.Text()
 
 		var players, lastMarble int
-		if _, err := fmt.Sscanf(line, "%d players; last marble is worth %d points", &players, &lastMarble); err != nil {
+
+		_, err := fmt.Sscanf(
+			line,
+			"%d players; last marble is worth %d points",
+			&players, &lastMarble,
+		)
+
+		if err != nil {
 			log.Fatal(err)
 		}
 
+		// Part 1 simulation
+
 		highscore := sim(players, lastMarble)
 
-		fmt.Printf("with players: %v, last marble worth: %v. Got highscore: %v\n", players, lastMarble, highscore)
+		fmt.Printf("with players: %v, last marble worth: %v. Got highscore: %v\n",
+			players, lastMarble, highscore)
+
+		// Part 2 simulation
 
 		lastMarble *= 100
 
 		highscore = sim(players, lastMarble)
 
-		fmt.Printf("with players: %v, last marble worth: %v. Got highscore: %v\n", players, lastMarble, highscore)
+		fmt.Printf("with players: %v, last marble worth: %v. Got highscore: %v\n",
+			players, lastMarble, highscore)
 
 	}
 
